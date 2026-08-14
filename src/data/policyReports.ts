@@ -103,4 +103,51 @@ export const policyReports: PolicyReport[] = [
       },
     ],
   },
+  {
+    apiVersion: 'wgpolicyk8s.io/v1alpha2',
+    kind: 'PolicyReport',
+    metadata: { name: 'polr-ns-checkout', namespace: 'checkout' },
+    summary: { pass: 2, fail: 0, warn: 1, error: 0, skip: 0 },
+    results: [
+      {
+        source: 'kyverno',
+        policy: 'require-team-label',
+        rule: 'check-team-label',
+        result: 'pass',
+        severity: 'medium',
+        category: 'Best Practices',
+        message: "validation rule 'check-team-label' passed.",
+        scored: true,
+        resources: [
+          { apiVersion: 'apps/v1', kind: 'Deployment', name: 'checkout-api', namespace: 'checkout' },
+        ],
+      },
+      {
+        source: 'kyverno',
+        policy: 'require-team-label',
+        rule: 'check-team-label',
+        result: 'pass',
+        severity: 'medium',
+        category: 'Best Practices',
+        message: "validation rule 'check-team-label' passed.",
+        scored: true,
+        resources: [
+          { apiVersion: 'v1', kind: 'Pod', name: 'checkout-web-5f77', namespace: 'checkout' },
+        ],
+      },
+      {
+        source: 'kyverno',
+        policy: 'disallow-privileged-containers',
+        rule: 'privileged-containers',
+        result: 'warn',
+        severity: 'high',
+        category: 'Pod Security',
+        message: 'audit: container runs in privileged mode. Set securityContext.privileged to false.',
+        scored: true,
+        resources: [
+          { apiVersion: 'v1', kind: 'Pod', name: 'checkout-web-5f77', namespace: 'checkout' },
+        ],
+      },
+    ],
+  },
 ];
