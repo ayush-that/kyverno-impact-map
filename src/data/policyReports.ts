@@ -150,4 +150,86 @@ export const policyReports: PolicyReport[] = [
       },
     ],
   },
+  {
+    apiVersion: 'wgpolicyk8s.io/v1alpha2',
+    kind: 'PolicyReport',
+    metadata: { name: 'polr-ns-web', namespace: 'web' },
+    summary: { pass: 2, fail: 1, warn: 0, error: 0, skip: 0 },
+    results: [
+      {
+        source: 'kyverno',
+        policy: 'require-team-label',
+        rule: 'check-team-label',
+        result: 'fail',
+        severity: 'medium',
+        category: 'Best Practices',
+        message:
+          "validation error: The label 'team' is required on all workloads. rule check-team-label failed at path /metadata/labels/team/",
+        scored: true,
+        resources: [
+          { apiVersion: 'v1', kind: 'Pod', name: 'frontend-6b8d', namespace: 'web' },
+        ],
+      },
+      {
+        source: 'kyverno',
+        policy: 'require-team-label',
+        rule: 'check-team-label',
+        result: 'pass',
+        severity: 'medium',
+        category: 'Best Practices',
+        message: "validation rule 'check-team-label' passed.",
+        scored: true,
+        resources: [
+          { apiVersion: 'apps/v1', kind: 'Deployment', name: 'nginx-deploy', namespace: 'web' },
+        ],
+      },
+      {
+        source: 'kyverno',
+        policy: 'disallow-privileged-containers',
+        rule: 'privileged-containers',
+        result: 'pass',
+        severity: 'high',
+        category: 'Pod Security',
+        message: "validation rule 'privileged-containers' passed.",
+        scored: true,
+        resources: [
+          { apiVersion: 'v1', kind: 'Pod', name: 'frontend-6b8d', namespace: 'web' },
+        ],
+      },
+    ],
+  },
+  {
+    apiVersion: 'wgpolicyk8s.io/v1alpha2',
+    kind: 'PolicyReport',
+    metadata: { name: 'polr-ns-batch', namespace: 'batch' },
+    summary: { pass: 1, fail: 0, warn: 1, error: 0, skip: 0 },
+    results: [
+      {
+        source: 'kyverno',
+        policy: 'require-team-label',
+        rule: 'check-team-label',
+        result: 'pass',
+        severity: 'medium',
+        category: 'Best Practices',
+        message: "validation rule 'check-team-label' passed.",
+        scored: true,
+        resources: [
+          { apiVersion: 'v1', kind: 'Pod', name: 'nightly-report-job', namespace: 'batch' },
+        ],
+      },
+      {
+        source: 'kyverno',
+        policy: 'disallow-privileged-containers',
+        rule: 'privileged-containers',
+        result: 'warn',
+        severity: 'high',
+        category: 'Pod Security',
+        message: 'audit: container runs in privileged mode. Set securityContext.privileged to false.',
+        scored: true,
+        resources: [
+          { apiVersion: 'v1', kind: 'Pod', name: 'nightly-report-job', namespace: 'batch' },
+        ],
+      },
+    ],
+  },
 ];
